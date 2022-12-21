@@ -35,6 +35,11 @@ public class PaymentRepository {
         new InsertTaskAsync(paymentDao).execute(paymentModel);
     }
 
+    @SuppressWarnings("unchecked")
+    public void insertNewPaymentList(List<PaymentModel> paymentList) {
+        new InsertListTaskAsync(paymentDao).execute(paymentList);
+    }
+
     public void deleteAll() {
         new DeleteAllTaskAsync(paymentDao).execute();
     }
@@ -46,7 +51,7 @@ public class PaymentRepository {
 
     private static class InsertTaskAsync extends AsyncTask<PaymentModel, Void, Void> {
 
-        private PaymentDao paymentDao;
+        private final PaymentDao paymentDao;
 
         public InsertTaskAsync(PaymentDao paymentDao) {
             this.paymentDao = paymentDao;
@@ -63,9 +68,26 @@ public class PaymentRepository {
         }
     }
 
+    private static class InsertListTaskAsync extends AsyncTask<List<PaymentModel>, Void, Void> {
+
+        private final PaymentDao paymentDao;
+
+        public InsertListTaskAsync(PaymentDao paymentDao) {
+            this.paymentDao = paymentDao;
+        }
+
+        @Override
+        protected Void doInBackground(List<PaymentModel>... lists) {
+            for (int i = 0; i < lists[0].size(); i++) {
+                paymentDao.insertNewPayment(lists[0].get(i));
+            }
+            return null;
+        }
+    }
+
     private static class DeleteAllTaskAsync extends AsyncTask<Void, Void, Void> {
 
-        private PaymentDao paymentDao;
+        private final PaymentDao paymentDao;
 
         public DeleteAllTaskAsync(PaymentDao paymentDao) {
             this.paymentDao = paymentDao;
@@ -80,7 +102,7 @@ public class PaymentRepository {
 
     private static class DeleteTaskAsync extends AsyncTask<PaymentModel, Void, Void> {
 
-        private PaymentDao paymentDao;
+        private final PaymentDao paymentDao;
 
         public DeleteTaskAsync(PaymentDao paymentDao) {
             this.paymentDao = paymentDao;

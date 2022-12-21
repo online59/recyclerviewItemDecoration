@@ -56,6 +56,11 @@ public class PaymentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return paymentList == null ? 0 : paymentList.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return paymentList == null ? 0: paymentList.get(position).getViewType();
+    }
+
     private static class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvDate;

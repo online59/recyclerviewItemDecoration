@@ -1,27 +1,45 @@
 package com.example.simpleexpensemanager.database;
 
+import android.os.AsyncTask;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class CreateNewData {
 
-    private static final int MAX = 15;
+    private static final int MAX = 24;
     private static String[] paymentDesc = {"Transportation", "Fuel", "Breakfast", "Lunch", "Dinner", "Shopping"};
-    final static int min = 100;
-    final static int max = 2000;
-    final static int random = new Random().nextInt((max - min) + 1) + min;
+    final static int min_a = 100;
+    final static int max_a = 2000;
+    final static int min_p = 0;
+    final static int max_p = 6;
 
 
     public static List<PaymentModel> createData() {
-        List<PaymentModel> paymentModelList = new ArrayList<>();
-        int viewType = 0;
-        for (int i = 0; i < MAX; i++) {
-            if (i % 5 == 0) {
-                viewType = 1;
-            }
-            paymentModelList.add(new PaymentModel(paymentDesc[i], random, System.currentTimeMillis()/1000, viewType));
+        return new CreateDataAsync().doInBackground();
+    }
+
+    private static class CreateDataAsync extends AsyncTask<Void, Void, List<PaymentModel>> {
+
+        public CreateDataAsync() {
         }
-        return paymentModelList;
+
+        @Override
+        protected List<PaymentModel> doInBackground(Void... voids) {
+            List<PaymentModel> paymentModelList = new ArrayList<>();
+            int viewType = 0;
+            for (int i = 0; i < MAX; i++) {
+
+                int randomAmount = new Random().nextInt((max_a - min_a) + 1) + min_a;
+                int randomPayment = new Random().nextInt(max_p - min_p) + min_p;
+
+                if (i % 5 == 0) {
+                    viewType = 1;
+                }
+                paymentModelList.add(new PaymentModel(paymentDesc[randomPayment], randomAmount, System.currentTimeMillis()/1000, viewType));
+            }
+            return paymentModelList;
+        }
     }
 }
