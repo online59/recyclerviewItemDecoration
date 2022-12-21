@@ -13,6 +13,3 @@ If you would like to contribute to this project, please fork the repository and 
 
 <h3>Acknowledgments</h3>
 Android Architecture Components
-<br>
-<br>
-This README.md file provides a basic overview of the expense manager app, including its features, how to get started, and how to contribute. It also includes a list of acknowledgments for libraries and tools used in the project, as well as a license. You may want to customize this README.md file to include more information about the app, such as screenshots or a usage guide
