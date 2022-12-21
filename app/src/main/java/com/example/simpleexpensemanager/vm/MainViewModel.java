@@ -32,6 +32,10 @@ public class MainViewModel extends AndroidViewModel {
         paymentRepository.insertNewPayment(paymentModel);
     }
 
+    public void insertNewPaymentList(List<PaymentModel> paymentModels) {
+        paymentRepository.insertNewPaymentList(paymentModels);
+    }
+
     public void deleteAll() {
         paymentRepository.deleteAll();
     }

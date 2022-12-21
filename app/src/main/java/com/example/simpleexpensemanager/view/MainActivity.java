@@ -1,10 +1,11 @@
 package com.example.simpleexpensemanager.view;
 
-import static android.content.ContentValues.TAG;
-
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +16,7 @@ import com.example.simpleexpensemanager.database.CreateNewData;
 import com.example.simpleexpensemanager.database.PaymentModel;
 import com.example.simpleexpensemanager.vm.MainViewModel;
 
-import java.util.Random;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private MainViewModel viewModel;
@@ -37,8 +38,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        CreateNewData.createData();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.topbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.topbar_insert_data) {
+            List<PaymentModel> paymentMList = CreateNewData.createData();
+            viewModel.insertNewPaymentList(paymentMList);
+        } else {
+            viewModel.deleteAll();
+        }
+        return true;
     }
 }

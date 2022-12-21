@@ -13,6 +13,8 @@ import com.example.simpleexpensemanager.R;
 import com.example.simpleexpensemanager.database.PaymentModel;
 import com.example.simpleexpensemanager.vm.MainViewModel;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class PaymentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -47,7 +49,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             paymentViewHolder.getTvAmount().setText(String.valueOf(paymentList.get(position).getPaymentAmount()));
         } else {
             HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
-            headerViewHolder.getTvDate().setText(String.valueOf(paymentList.get(position).getTimeStamp()));
+            headerViewHolder.getTvDate().setText(headerViewHolder.getDate(paymentList.get(position).getTimeStamp()));
         }
     }
 
@@ -72,6 +74,13 @@ public class PaymentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public TextView getTvDate() {
             return tvDate;
+        }
+
+        public String getDate(long timestamp) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(timestamp);
+            Date date = calendar.getTime();
+            return date.toString();
         }
     }
 
