@@ -1,9 +1,11 @@
 package com.example.simpleexpensemanager.view;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,11 +31,12 @@ public class MainActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         PaymentAdapter adapter = new PaymentAdapter(viewModel, this);
-
         RecyclerView recyclerView = findViewById(R.id.payment_list_recycler_view);
+        View headerView = LayoutInflater.from(this).inflate(R.layout.payment_header, recyclerView, false);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new HeaderDecoration(headerView, true));
         recyclerView.setAdapter(adapter);
     }
 
