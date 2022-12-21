@@ -3,6 +3,7 @@ package com.example.simpleexpensemanager.view;
 import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,19 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
         createData();
 
-        PaymentAdapter adapter = new PaymentAdapter();
+        PaymentAdapter adapter = new PaymentAdapter(viewModel, this);
 
         RecyclerView recyclerView = findViewById(R.id.payment_list_recycler_view);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
-
-        viewModel.getAllPayment().observe(this, paymentData -> {
-            Log.e(TAG, "onCreate: " + paymentData );
-            adapter.setData(paymentData);
-            adapter.notifyDataSetChanged();
-        });
     }
 
     public void createData() {
@@ -56,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             if (i % 5 == 0) {
                 viewType = 1;
             }
-
+            System.out.println(randomAmount);
             viewModel.insertNewPayment(new PaymentModel(
                     paymentDesc[randomPayment],
                     randomAmount,

@@ -6,10 +6,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simpleexpensemanager.R;
 import com.example.simpleexpensemanager.database.PaymentModel;
+import com.example.simpleexpensemanager.vm.MainViewModel;
 
 import java.util.List;
 
@@ -17,11 +19,12 @@ public class PaymentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private List<PaymentModel> paymentList;
 
-    public void setData(List<PaymentModel> paymentList) {
-        this.paymentList = paymentList;
-    }
-
-    public PaymentAdapter() {
+    public PaymentAdapter(MainViewModel viewModel, LifecycleOwner lifecycleOwner) {
+        viewModel.getAllPayment().observe(lifecycleOwner, paymentData -> {
+            paymentList = paymentData;
+            notifyDataSetChanged();
+            System.out.println("DataSet" + paymentList);
+        });
     }
 
     @NonNull
