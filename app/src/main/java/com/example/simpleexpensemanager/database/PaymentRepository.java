@@ -1,6 +1,7 @@
 package com.example.simpleexpensemanager.database;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -31,14 +32,64 @@ public class PaymentRepository {
     }
 
     public void insertNewPayment(PaymentModel paymentModel){
-        new Thread(() -> paymentDao.insertNewPayment(paymentModel));
+        new InsertTaskAsync(paymentDao).execute(paymentModel);
     }
 
     public void deleteAll() {
-        new Thread(paymentDao::deleteAll);
+        new DeleteAllTaskAsync(paymentDao).execute();
     }
 
     public void deletePayment(PaymentModel paymentModel){
-        new Thread(() -> paymentDao.deletePayment(paymentModel));
+        new DeleteTaskAsync(paymentDao).execute(paymentModel);
+    }
+
+
+    private static class InsertTaskAsync extends AsyncTask<PaymentModel, Void, Void> {
+
+        private PaymentDao paymentDao;
+
+        public InsertTaskAsync(PaymentDao paymentDao) {
+            this.paymentDao = paymentDao;
+        }
+
+        @Override
+        protected Void doInBackground(PaymentModel... paymentModels) {
+
+            for (PaymentModel payment: paymentModels) {
+                paymentDao.insertNewPayment(payment);
+            }
+
+            return null;
+        }
+    }
+
+    private static class DeleteAllTaskAsync extends AsyncTask<Void, Void, Void> {
+
+        private PaymentDao paymentDao;
+
+        public DeleteAllTaskAsync(PaymentDao paymentDao) {
+            this.paymentDao = paymentDao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            paymentDao.deleteAll();
+            return null;
+        }
+    }
+
+    private static class DeleteTaskAsync extends AsyncTask<PaymentModel, Void, Void> {
+
+        private PaymentDao paymentDao;
+
+        public DeleteTaskAsync(PaymentDao paymentDao) {
+            this.paymentDao = paymentDao;
+        }
+
+        @Override
+        protected Void doInBackground(PaymentModel... paymentModels) {
+            paymentDao.deletePayment(paymentModels[0]);
+            return null;
+        }
     }
 }

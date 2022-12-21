@@ -23,7 +23,6 @@ public class PaymentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         viewModel.getAllPayment().observe(lifecycleOwner, paymentData -> {
             paymentList = paymentData;
             notifyDataSetChanged();
-            System.out.println("DataSet" + paymentList);
         });
     }
 
@@ -31,13 +30,10 @@ public class PaymentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        System.out.println("onCreateViewHolder");
         if (viewType == 0) {
-            System.out.println("onCreateViewHolder1");
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.payment_list_item, parent, false);
             return new PaymentViewHolder(view);
         } else  {
-            System.out.println("onCreateViewHolder2");
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.payment_header, parent, false);
             return new HeaderViewHolder(view);
         }
@@ -45,14 +41,11 @@ public class PaymentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        System.out.println("onBindViewHolder");
         if (holder.getItemViewType() == 0) {
-            System.out.println("onBindViewHolder1");
             PaymentViewHolder paymentViewHolder = (PaymentViewHolder) holder;
             paymentViewHolder.getTvDesc().setText(paymentList.get(position).getPaymentDescription());
-            paymentViewHolder.getTvAmount().setText(paymentList.get(position).getPaymentAmount());
+            paymentViewHolder.getTvAmount().setText(String.valueOf(paymentList.get(position).getPaymentAmount()));
         } else {
-            System.out.println("onBindViewHolder2");
             HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
             headerViewHolder.getTvDate().setText(String.valueOf(paymentList.get(position).getTimeStamp()));
         }
