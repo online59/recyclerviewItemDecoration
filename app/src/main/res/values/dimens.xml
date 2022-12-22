@@ -2,4 +2,5 @@
 <resources>
     <dimen name="payment_item_height">64dp</dimen>
     <dimen name="small_padding">8dp</dimen>
+    <dimen name="header_height">40dp</dimen>
 </resources>

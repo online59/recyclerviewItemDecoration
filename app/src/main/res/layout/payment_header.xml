@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:background="@color/purple_200"
-    android:layout_height="40dp">
+    android:layout_height="@dimen/header_height">
 
     <TextView
         android:textSize="16sp"
@@ -12,6 +12,6 @@
         android:padding="@dimen/small_padding"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/tv_payments_date"/>
+        android:id="@+id/tv_header"/>
 
 </LinearLayout>

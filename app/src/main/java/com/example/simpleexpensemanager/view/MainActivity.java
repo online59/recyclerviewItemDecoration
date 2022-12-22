@@ -1,11 +1,9 @@
 package com.example.simpleexpensemanager.view;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.simpleexpensemanager.R;
 import com.example.simpleexpensemanager.database.CreateNewData;
 import com.example.simpleexpensemanager.database.PaymentModel;
+import com.example.simpleexpensemanager.util.UtilsClass;
 import com.example.simpleexpensemanager.vm.MainViewModel;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private MainViewModel viewModel;
+    List<PaymentModel> paymentList = CreateNewData.createData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +32,35 @@ public class MainActivity extends AppCompatActivity {
 
         PaymentAdapter adapter = new PaymentAdapter(viewModel, this);
         RecyclerView recyclerView = findViewById(R.id.payment_list_recycler_view);
-        View headerView = LayoutInflater.from(this).inflate(R.layout.payment_header, recyclerView, false);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.addItemDecoration(new HeaderDecoration(headerView, true));
         recyclerView.setAdapter(adapter);
+
+        HeaderDecoration decoration = new HeaderDecoration(true, getHeaderCallback(paymentList));
+        recyclerView.addItemDecoration(decoration);
+    }
+
+    private HeaderDecoration.HeaderCallback getHeaderCallback(final List<PaymentModel> paymentList) {
+        return new HeaderDecoration.HeaderCallback() {
+            @Override
+            public boolean isHeader(int position) {
+
+                if (position == 0) {
+                    return true;
+                }
+
+                String currentHeader = UtilsClass.getDate(paymentList.get(position).getTimeStamp());
+                String previousHeader = UtilsClass.getDate(paymentList.get(position - 1).getTimeStamp());
+
+                return !currentHeader.equalsIgnoreCase(previousHeader);
+            }
+
+            @Override
+            public String getHeader(int position) {
+                return UtilsClass.getDate(paymentList.get(position).getTimeStamp());
+            }
+        };
     }
 
     @Override
@@ -50,8 +73,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.topbar_insert_data) {
-            List<PaymentModel> paymentMList = CreateNewData.createData();
-            viewModel.insertNewPaymentList(paymentMList);
+            viewModel.insertNewPaymentList(paymentList);
         } else {
             viewModel.deleteAll();
         }
