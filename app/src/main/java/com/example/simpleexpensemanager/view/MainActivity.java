@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
 
-                Log.e(TAG, "isHeader: " + position);
+                Log.e(TAG, "isHeader: " + position + " Size: " + paymentList.size());
 
                 String currentHeader = Utils.getDate(paymentList.get(position).getTimeStamp());
                 String previousHeader = Utils.getDate(paymentList.get(position - 1).getTimeStamp());
@@ -77,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public String getHeader(int position) {
+
+                if (paymentList.size() == 0) {
+                    return "";
+                }
 
                 // Text to put as a header
                 return Utils.getDate(paymentList.get(position).getTimeStamp());
@@ -93,12 +97,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        List<PaymentModel> listItem;
+        List<PaymentModel> listItem = new ArrayList<>();
         if (item.getItemId() == R.id.topbar_insert_data) {
             listItem = CreateNewData.createData();
             paymentList.addAll(listItem);
             viewModel.insertNewPaymentList(paymentList);
         } else {
+            if (!paymentList.isEmpty()) {
+                paymentList.clear();
+            }
             viewModel.deleteAll();
         }
         return true;

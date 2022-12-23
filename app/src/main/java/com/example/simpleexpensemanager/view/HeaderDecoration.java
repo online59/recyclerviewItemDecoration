@@ -32,7 +32,7 @@ public class HeaderDecoration extends RecyclerView.ItemDecoration {
         super.getItemOffsets(outRect, view, parent, state);
 
         int position = parent.getChildAdapterPosition(view);
-        Log.e(TAG, "getItemOffsets: " + position );
+        Log.e(TAG, "getItemOffsets: " + position + " Count total item: " + parent.getChildCount());
         if (headerCallback.isHeader(position)) {
             outRect.top = mHeaderView.getHeight();
         }
