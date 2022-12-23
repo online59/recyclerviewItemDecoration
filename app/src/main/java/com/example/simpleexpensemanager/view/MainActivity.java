@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.simpleexpensemanager.R;
 import com.example.simpleexpensemanager.database.CreateNewData;
 import com.example.simpleexpensemanager.database.PaymentModel;
-import com.example.simpleexpensemanager.util.UtilsClass;
+import com.example.simpleexpensemanager.util.Utils;
 import com.example.simpleexpensemanager.vm.MainViewModel;
 
 import java.util.List;
@@ -46,19 +46,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean isHeader(int position) {
 
+                // If there is no data, not drawing header
+                if (paymentList.size() == 0) {
+                    return false;
+                }
+
+                // At the first item of the list, make it the header
                 if (position == 0) {
                     return true;
                 }
 
-                String currentHeader = UtilsClass.getDate(paymentList.get(position).getTimeStamp());
-                String previousHeader = UtilsClass.getDate(paymentList.get(position - 1).getTimeStamp());
+                String currentHeader = Utils.getDate(paymentList.get(position).getTimeStamp());
+                String previousHeader = Utils.getDate(paymentList.get(position - 1).getTimeStamp());
 
+                // If the current header name match the previous header, not drawing header, else draw header
                 return !currentHeader.equalsIgnoreCase(previousHeader);
             }
 
             @Override
             public String getHeader(int position) {
-                return UtilsClass.getDate(paymentList.get(position).getTimeStamp());
+
+                // Text to put as a header
+                return Utils.getDate(paymentList.get(position).getTimeStamp());
             }
         };
     }
@@ -78,5 +87,11 @@ public class MainActivity extends AppCompatActivity {
             viewModel.deleteAll();
         }
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        viewModel.deleteAll();
     }
 }

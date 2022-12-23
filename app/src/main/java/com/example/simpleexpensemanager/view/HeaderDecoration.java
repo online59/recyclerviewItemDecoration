@@ -28,7 +28,8 @@ public class HeaderDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
 
-        if (parent.getChildAdapterPosition(view) == 0) {
+        int position = parent.getChildAdapterPosition(view);
+        if (headerCallback.isHeader(position)) {
             outRect.top = mHeaderView.getHeight();
         }
     }
@@ -46,6 +47,16 @@ public class HeaderDecoration extends RecyclerView.ItemDecoration {
         int top = parent.getPaddingTop();
         int bottom = mHeaderView.getHeight();
 
+//        View firstVisibleChild = parent.getChildAt(0);
+//        int firstVisibleChildPosition = parent.getChildLayoutPosition(firstVisibleChild);
+//
+//        if (firstVisibleChildPosition != 0) {
+//            int firstVisibleChildTop = firstVisibleChild.getTop();
+//            if (firstVisibleChildTop < 0) {
+//                top = firstVisibleChildTop;
+//            }
+//        }
+
         String previousHeader = "";
 
         for (int i = 0; i < parent.getChildCount(); i++) {
@@ -58,21 +69,10 @@ public class HeaderDecoration extends RecyclerView.ItemDecoration {
                 drawHeader(c, child, mHeaderView);
                 previousHeader = header;
             }
-
         }
 
-//        if (mSticky) {
-//            View firstVisibleChild = parent.getChildAt(0);
-//            if (firstVisibleChild != null) {
-//                int firstVisibleChildTop = firstVisibleChild.getTop();
-//                if (firstVisibleChildTop < 0) {
-//                    top = firstVisibleChildTop;
-//                }
-//            }
-//        }
-
-        mHeaderView.layout(parent.getLeft(), top, parent.getHeight(), bottom);
-        mHeaderView.draw(c);
+//        mHeaderView.layout(parent.getLeft(), top, parent.getHeight(), bottom);
+//        mHeaderView.draw(c);
     }
 
     private void drawHeader(Canvas c, View child, View mHeaderView) {
@@ -82,7 +82,6 @@ public class HeaderDecoration extends RecyclerView.ItemDecoration {
         } else {
             c.translate(0, child.getTop() - mHeaderView.getHeight());
         }
-
         mHeaderView.draw(c);
         c.restore();
     }
@@ -103,6 +102,7 @@ public class HeaderDecoration extends RecyclerView.ItemDecoration {
 
     public interface HeaderCallback {
         boolean isHeader(int position);
+
         String getHeader(int position);
     }
 }

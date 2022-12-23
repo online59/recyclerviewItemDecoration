@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simpleexpensemanager.R;
 import com.example.simpleexpensemanager.database.PaymentModel;
-import com.example.simpleexpensemanager.util.UtilsClass;
+import com.example.simpleexpensemanager.util.Utils;
 import com.example.simpleexpensemanager.vm.MainViewModel;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
 
     // Create a method to return a header text to the HeaderDecoration class
     public String getHeaderText(int position) {
-        return UtilsClass.getDateTime(paymentList.get(position).getTimeStamp());
+        return Utils.getDateTime(paymentList.get(position).getTimeStamp());
     }
 
     public PaymentAdapter(MainViewModel viewModel, LifecycleOwner lifecycleOwner) {
