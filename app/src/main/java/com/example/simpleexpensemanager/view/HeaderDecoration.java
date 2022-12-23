@@ -1,7 +1,10 @@
 package com.example.simpleexpensemanager.view;
 
+import static android.content.ContentValues.TAG;
+
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +32,7 @@ public class HeaderDecoration extends RecyclerView.ItemDecoration {
         super.getItemOffsets(outRect, view, parent, state);
 
         int position = parent.getChildAdapterPosition(view);
+        Log.e(TAG, "getItemOffsets: " + position );
         if (headerCallback.isHeader(position)) {
             outRect.top = mHeaderView.getHeight();
         }
@@ -44,19 +48,6 @@ public class HeaderDecoration extends RecyclerView.ItemDecoration {
             fixLayoutSize(mHeaderView, parent);
         }
 
-        int top = parent.getPaddingTop();
-        int bottom = mHeaderView.getHeight();
-
-//        View firstVisibleChild = parent.getChildAt(0);
-//        int firstVisibleChildPosition = parent.getChildLayoutPosition(firstVisibleChild);
-//
-//        if (firstVisibleChildPosition != 0) {
-//            int firstVisibleChildTop = firstVisibleChild.getTop();
-//            if (firstVisibleChildTop < 0) {
-//                top = firstVisibleChildTop;
-//            }
-//        }
-
         String previousHeader = "";
 
         for (int i = 0; i < parent.getChildCount(); i++) {
@@ -70,9 +61,6 @@ public class HeaderDecoration extends RecyclerView.ItemDecoration {
                 previousHeader = header;
             }
         }
-
-//        mHeaderView.layout(parent.getLeft(), top, parent.getHeight(), bottom);
-//        mHeaderView.draw(c);
     }
 
     private void drawHeader(Canvas c, View child, View mHeaderView) {

@@ -1,6 +1,9 @@
 package com.example.simpleexpensemanager.view;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,11 +20,12 @@ import com.example.simpleexpensemanager.database.PaymentModel;
 import com.example.simpleexpensemanager.util.Utils;
 import com.example.simpleexpensemanager.vm.MainViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private MainViewModel viewModel;
-    List<PaymentModel> paymentList = CreateNewData.createData();
+    List<PaymentModel> paymentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +46,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private HeaderDecoration.HeaderCallback getHeaderCallback(final List<PaymentModel> paymentList) {
+
         return new HeaderDecoration.HeaderCallback() {
             @Override
             public boolean isHeader(int position) {
+
+                // Because the payment list maybe null, so we check for null
+                if (paymentList == null) {
+                    return false;
+                }
 
                 // If there is no data, not drawing header
                 if (paymentList.size() == 0) {
@@ -55,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0) {
                     return true;
                 }
+
+                Log.e(TAG, "isHeader: " + position);
 
                 String currentHeader = Utils.getDate(paymentList.get(position).getTimeStamp());
                 String previousHeader = Utils.getDate(paymentList.get(position - 1).getTimeStamp());
@@ -81,7 +93,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        List<PaymentModel> listItem;
         if (item.getItemId() == R.id.topbar_insert_data) {
+            listItem = CreateNewData.createData();
+            paymentList.addAll(listItem);
             viewModel.insertNewPaymentList(paymentList);
         } else {
             viewModel.deleteAll();

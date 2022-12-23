@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class CreateNewData {
 
-    private static final int MAX = 31;
+    private static final int MAX = 7;
     private final static String[] paymentDesc = {"Transportation", "Fuel", "Breakfast", "Lunch", "Dinner", "Shopping"};
     final static int min_a = 100;
     final static int max_a = 2000;
