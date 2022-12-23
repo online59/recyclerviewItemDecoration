@@ -1,9 +1,6 @@
 package com.example.simpleexpensemanager.view;
 
-import static android.content.ContentValues.TAG;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -66,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
 
-                Log.e(TAG, "isHeader: " + position + " Size: " + paymentList.size());
-
                 String currentHeader = Utils.getDate(paymentList.get(position).getTimeStamp());
                 String previousHeader = Utils.getDate(paymentList.get(position - 1).getTimeStamp());
 
@@ -97,11 +92,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        List<PaymentModel> listItem = new ArrayList<>();
+        List<PaymentModel> listItem;
         if (item.getItemId() == R.id.topbar_insert_data) {
             listItem = CreateNewData.createData();
             paymentList.addAll(listItem);
-            viewModel.insertNewPaymentList(paymentList);
+            viewModel.insertNewPaymentList(listItem);
         } else {
             if (!paymentList.isEmpty()) {
                 paymentList.clear();
